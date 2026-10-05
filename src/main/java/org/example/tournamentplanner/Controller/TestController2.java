@@ -31,9 +31,8 @@ public class TestController2 {
 
     /** POST /api/test */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) // 201 Created is the conventional response
+    @ResponseStatus(HttpStatus.CREATED)
     public TestDTO create(@RequestBody TestDTO dto) {
-        // Spring automatically deserialises JSON → TestDTO
         return testService.save(dto);
     }
 }
