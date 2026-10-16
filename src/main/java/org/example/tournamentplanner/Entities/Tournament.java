@@ -1,23 +1,35 @@
 package org.example.tournamentplanner.Entities;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
-public class Tournament
-{
-    public String ID;
-    public String name;
-    public String bracketType;
-    public String gameFormat;
-    public String description;
-    public int capacity;
-    public LocalDate startTime;
+@Entity
+@Table(name = "tournaments")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class Tournament {
 
-    public Tournament(String ID, String name, String bracketType, String gameFormat, int capacity, LocalDate startTime) {
-        this.ID = ID;
-        this.name = name;
-        this.bracketType = bracketType;
-        this.gameFormat = gameFormat;
-        this.capacity = capacity;
-        this.startTime = startTime;
-    }
+    @Id
+    @GeneratedValue
+    private UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizer_id", nullable = false)
+    private Organizer organizer;
+
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Match> matches = new HashSet<>();
+
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Team> teams = new HashSet<>();
 }
