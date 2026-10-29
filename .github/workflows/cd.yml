@@ -1,0 +1,14 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  print-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print CD Message
+        run: echo "CD pipeline triggered on merge to master branch."

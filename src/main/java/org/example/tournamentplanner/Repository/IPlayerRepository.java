@@ -1,4 +1,10 @@
 package org.example.tournamentplanner.Repository;
 
-public interface IPlayerRepository {
+import org.example.tournamentplanner.Entities.Player;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface IPlayerRepository extends JpaRepository<Player, UUID> {
+
 }

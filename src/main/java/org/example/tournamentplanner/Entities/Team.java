@@ -3,9 +3,7 @@ package org.example.tournamentplanner.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "teams")
@@ -33,5 +31,5 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    private Set<Player> players = new HashSet<>();
+    private List<Player> players = new ArrayList<>();
 }
