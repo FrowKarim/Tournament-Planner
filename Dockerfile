@@ -1,3 +1,10 @@
+FROM eclipse-temurin:25-jdk-jammy AS build
+WORKDIR /app
+COPY . .
+RUN chmod +x gradlew && ./gradlew bootJar --no-daemon
+
+
+
 FROM eclipse-temurin:25-jre-jammy
 
 WORKDIR /app
