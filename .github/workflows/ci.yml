@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   print-message:
@@ -11,4 +11,4 @@ jobs:
 
     steps:
       - name: Print CI Message
-        run: echo "CI pipeline triggered for pull request to main branch."
+        run: echo "CI pipeline triggered for pull request to master branch."
