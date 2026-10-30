@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController("api/teams")
 public class TeamController {
 
-    @Autowired
+
     private TeamService teamService;
 
     @PostMapping
     public Team createTeam(@RequestBody CreateTeamDTO team) {
 
-        te
+
+        return teamService.createTeam(team);
     }
 
 }

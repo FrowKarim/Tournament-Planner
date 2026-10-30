@@ -21,6 +21,8 @@ public class MatchService {
         Match match = new Match();
         match.setHomeScore(0);
         match.setAwayScore(0);
+        match.setStartTime(LocalDateTime.now());
+//        match.setTournament();
 
 
         return matchRepository.save(match);
