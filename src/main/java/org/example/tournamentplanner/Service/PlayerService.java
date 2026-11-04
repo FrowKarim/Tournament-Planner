@@ -2,10 +2,12 @@ package org.example.tournamentplanner.Service;
 
 import org.example.tournamentplanner.Entities.Player;
 import org.example.tournamentplanner.Repository.IPlayerRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class PlayerService {
 
     private IPlayerRepository playerRepository;
@@ -16,5 +18,9 @@ public class PlayerService {
 
     public List<Player> getPlayersByIds(List<UUID> ids) {
         return playerRepository.findAllById(ids);
+    }
+
+    public Player getPlayerById(UUID id) {
+        return playerRepository.findById(id).orElse(null);
     }
 }
