@@ -17,6 +17,7 @@ public class Match {
 
     private LocalDateTime startTime;
 
+    //Fetchtype lazy means that it doesn't load all neighboring entities. So in this case it doesn't load tournament
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
@@ -29,7 +30,7 @@ public class Match {
     @JoinColumn(name = "away_team_id")
     private Team awayTeam;
 
-    // simple scoring columns – you can expand as needed
+
     private Integer homeScore;
     private Integer awayScore;
 }

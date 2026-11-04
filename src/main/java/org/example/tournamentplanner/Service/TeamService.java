@@ -9,21 +9,23 @@ import org.example.tournamentplanner.Repository.IPlayerRepository;
 import org.example.tournamentplanner.Repository.ITeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TeamService {
 
-@Autowired
+
  private ITeamRepository teamRepository;
 
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     private IPlayerRepository playerRepository;
+
+    public void PlayerService(IPlayerRepository repository) {
+        this.playerRepository = repository;
+    }
+
 
     public Team createTeam (CreateTeamDTO DTO) {
         Team team = new Team();
@@ -32,7 +34,7 @@ public class TeamService {
 
         List<Player> players = playerRepository.findAllById(DTO.getPlayerIDs());
 
-
+// commented bc I don't have playerDTO's yet
 //        List<Player> playerReferences = DTO.getPlayerIDs()
 //                .stream()
 //                .map(playerId -> entityManager.getReference(Player.class, playerId)) // Create a reference
