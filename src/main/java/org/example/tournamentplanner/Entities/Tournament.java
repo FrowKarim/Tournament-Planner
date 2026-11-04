@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Tournament {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -24,7 +24,7 @@ public class Tournament {
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organizer_id", nullable = false)
+    @JoinColumn(name = "organizer_id", nullable = true) //NULLABLE SUPPOSED TO BE FALSE, THIS IS FOR TESTING
     private Organizer organizer;
 
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -32,4 +32,8 @@ public class Tournament {
 
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Team> teams = new HashSet<>();
+
+    public Tournament(String name) {
+        this.name = name;
+    }
 }

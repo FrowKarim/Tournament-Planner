@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequestMapping("/Organizer")
 public class OrganizerController {
 
-    @GetMapping
+    @GetMapping("/{id}")
     public UUID organizer(@RequestParam Organizer organizer) {
 
         return organizer.getId() ;

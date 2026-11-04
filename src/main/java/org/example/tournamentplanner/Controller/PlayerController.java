@@ -12,12 +12,6 @@ import java.util.List;
 
 public class PlayerController {
 
-    @GetMapping
-    public List<Team> getTeams() {
-
-
-
-    }
 
 }
 

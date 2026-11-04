@@ -1,9 +1,8 @@
 package org.example.tournamentplanner.DTO.team;
 import org.example.tournamentplanner.Entities.Team;
 
-public class TeamDTO
+import java.time.LocalDate;
+import java.util.UUID;
 
-{
-
-
+public record TeamDTO(UUID id, String name, LocalDate startDate) {
 }
