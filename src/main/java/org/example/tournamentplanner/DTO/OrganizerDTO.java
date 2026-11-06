@@ -1,4 +1,4 @@
 package org.example.tournamentplanner.DTO;
 
-public class OrganizerDTO {
+public record OrganizerDTO() {
 }

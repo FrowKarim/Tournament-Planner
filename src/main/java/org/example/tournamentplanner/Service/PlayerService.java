@@ -16,11 +16,16 @@ public class PlayerService {
         this.playerRepository = repository;
     }
 
-    public List<Player> getPlayersByIds(List<UUID> ids) {
-        return playerRepository.findAllById(ids);
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
     }
 
-    public Player getPlayerById(UUID id) {
+    public Player getPlayerById(Long id) {
         return playerRepository.findById(id).orElse(null);
     }
+
+    public Player save(Player player) {
+        return playerRepository.save(player);
+    }
 }
+

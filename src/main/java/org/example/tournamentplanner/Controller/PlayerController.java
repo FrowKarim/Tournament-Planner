@@ -28,12 +28,28 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-
-@PostMapping
-    public Player createPlayer(@RequestBody Player player) {
-        player.getFirstName();
-
-        return player;
+    @GetMapping
+    public List<Player> getAllPlayers() {
+        return playerService.getAllPlayers();
     }
+
+
+    @PostMapping
+    public Player createPlayer(@RequestBody Player player) {
+        return playerService.save(player);
+    }
+
+    @PutMapping
+    public Player updatePlayer(@RequestBody Player player) {
+
+        return playerService.save(player);
+    }
+
+    @DeleteMapping ("/{id}")
+    public void deletePlayer(UUID id) {
+
+    }
+
+
 }
 

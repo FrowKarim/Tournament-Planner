@@ -25,6 +25,7 @@ public class TournamentService {
 
     @Transactional
     public Tournament createTournament(CreateTournamentRequestDTO request) {
+        // Implementation not correct. Need a mapper or just skip DTO's entirely
         Tournament tournament = new Tournament(
           null,
                 request.Name(),
@@ -37,13 +38,5 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-//   Commented bc this is the version with organizerID and It doesn't work yet lmao
-//    @Transactional
-//    public Tournament createTournament(String name, UUID OrganizerID) {
-//        Tournament tournament = new Tournament();
-//        tournament.setName(name);
-//        tournament.setStartDate(LocalDate.now());
-//        return tournamentRepository.save(tournament);
-//    }
 
 }

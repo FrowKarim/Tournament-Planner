@@ -12,8 +12,8 @@ import java.util.UUID;
 public class Match {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private LocalDateTime startTime;
 

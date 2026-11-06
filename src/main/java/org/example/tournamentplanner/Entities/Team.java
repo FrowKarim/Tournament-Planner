@@ -11,8 +11,8 @@ import java.util.*;
 public class Team {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -21,9 +21,9 @@ public class Team {
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "captain_id", unique = true)
-    private TeamCaptain captain;
+    private Player captain;
 
     @ManyToMany
     @JoinTable(

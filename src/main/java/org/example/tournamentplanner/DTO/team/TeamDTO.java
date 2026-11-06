@@ -4,5 +4,5 @@ import org.example.tournamentplanner.Entities.Team;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record TeamDTO(UUID id, String name, LocalDate startDate) {
+public record TeamDTO(Long id, String name, LocalDate startDate) {
 }

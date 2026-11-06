@@ -29,9 +29,6 @@ public class TournamentController
         return tournamentService.createTournament(request);
     }
 
-//    @PostMapping
-//    public Tournament create(@RequestBody CreateTournamentRequestDTO request) {
-//        return tournamentService.createTournament(request.Name, request.OrganizerId);
-//    }
+
 
 }

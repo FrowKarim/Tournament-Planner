@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface ITournamentRepository extends JpaRepository<Tournament, UUID> {
+public interface ITournamentRepository extends JpaRepository<Tournament, Long> {
     boolean existsByName(String name);
 }

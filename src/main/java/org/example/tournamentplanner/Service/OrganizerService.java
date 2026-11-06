@@ -34,7 +34,7 @@ public class OrganizerService {
     }
 
 
-    public Tournament createTournament(UUID organizerId, String name,
+    public Tournament createTournament(Long organizerId, String name,
                                        LocalDate startDate, LocalDate endDate) {
 
         Organizer organizer = organizerRepository.findById(organizerId)
