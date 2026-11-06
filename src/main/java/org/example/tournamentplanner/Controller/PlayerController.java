@@ -23,7 +23,7 @@ public class PlayerController {
 
 // change UUID to long because I can't use this in getrequests easily
     @GetMapping("/{id}")
-    public Player getPlayer(@PathVariable UUID id) {
+    public Player getPlayer(@PathVariable Long id) {
 
         return playerService.getPlayerById(id);
     }
@@ -46,7 +46,7 @@ public class PlayerController {
     }
 
     @DeleteMapping ("/{id}")
-    public void deletePlayer(UUID id) {
+    public void deletePlayer(Long id) {
 
     }
 

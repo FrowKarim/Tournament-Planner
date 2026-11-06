@@ -10,7 +10,7 @@ import java.util.UUID;
 public class MatchController {
 
     @GetMapping
-    public Match getMatch(@RequestParam UUID matchID) {
+    public Match getMatch(@RequestParam Long matchID) {
 
         return  getMatch(matchID);
     }

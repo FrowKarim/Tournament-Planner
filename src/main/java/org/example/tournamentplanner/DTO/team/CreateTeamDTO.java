@@ -11,6 +11,6 @@ import java.util.UUID;
 public class CreateTeamDTO {
     private String TeamName;
     private int maxPlayers;
-    private List<UUID> playerIDs;
+    private List<Long> playerIDs;
 
 }

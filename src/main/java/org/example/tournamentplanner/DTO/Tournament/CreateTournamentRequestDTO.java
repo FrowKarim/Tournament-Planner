@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-public record CreateTournamentRequestDTO (String Name , UUID OrganizerId)
+public record CreateTournamentRequestDTO (String Name , Long OrganizerId)
 {
 
 }

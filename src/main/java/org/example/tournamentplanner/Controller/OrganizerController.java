@@ -14,7 +14,7 @@ import java.util.UUID;
 public class OrganizerController {
 
     @GetMapping("/{id}")
-    public UUID organizer(@RequestParam Organizer organizer) {
+    public Long organizer(@RequestParam Organizer organizer) {
 
         return organizer.getId() ;
     }
