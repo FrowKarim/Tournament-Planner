@@ -1,5 +1,6 @@
 package org.example.tournamentplanner.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,12 +19,15 @@ public class Team {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tournament_id")
+    @JoinColumn(name = "tournament_id")   // no nullable = false
+    @JsonIgnore
     private Tournament tournament;
 
     @ManyToOne
     @JoinColumn(name = "captain_id", unique = true)
     private Player captain;
+
+
 
     @ManyToMany
     @JoinTable(

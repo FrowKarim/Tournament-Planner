@@ -1,5 +1,6 @@
 package org.example.tournamentplanner.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -24,5 +25,6 @@ public class Player {
 
     // bi‑directional many‑to‑many with Team
     @ManyToMany(mappedBy = "players")
+    @JsonIgnore
     private List<Team> teams = new ArrayList<>();
 }

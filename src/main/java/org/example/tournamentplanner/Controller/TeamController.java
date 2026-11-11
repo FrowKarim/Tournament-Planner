@@ -6,17 +6,38 @@ import org.example.tournamentplanner.Service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("api/teams")
-public class TeamController {
+@RestController
+@RequestMapping("/Teams")
+public class TeamController
+{
 
+    private final TeamService teamService;
 
-    private TeamService teamService;
+    public TeamController(TeamService teamService) {
+        this.teamService = teamService;
+    }
+
+    @GetMapping("/{id}")
+    public Team getTeamByID(@PathVariable Long id)
+    {
+        return teamService.getTeam(id);
+    }
 
     @PostMapping
-    public Team createTeam(@RequestBody CreateTeamDTO team) {
+    public Team create(@RequestParam Long playerId, @RequestBody Team team) {
+        return teamService.createTeam(playerId, team);
+    }
 
+    @PostMapping("/{teamId}/players/{playerId}")
+    public Team addPlayer(@PathVariable Long teamId, @PathVariable Long playerId,
+                          @RequestParam Long requesterId) {
+        return teamService.addPlayer(teamId, playerId, requesterId);
+    }
 
-        return teamService.createTeam(team);
+    @DeleteMapping("/{teamId}/players/{playerId}")
+    public Team removePlayer(@PathVariable Long teamId, @PathVariable Long playerId,
+                             @RequestParam Long requesterId) {
+        return teamService.removePlayer(teamId, playerId, requesterId);
     }
 
 }
