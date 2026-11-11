@@ -32,13 +32,16 @@ public class Tournament {
 
     private Integer maxTeams; // null = unlimited
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TournamentStatus status = TournamentStatus.CREATED;
 
+    @Builder.Default
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Match> matches = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Team> teams = new ArrayList<>();
 

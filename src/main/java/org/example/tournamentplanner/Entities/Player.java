@@ -24,6 +24,7 @@ public class Player {
     private String email;
 
     // bi‑directional many‑to‑many with Team
+    @Builder.Default
     @ManyToMany(mappedBy = "players")
     @JsonIgnore
     private List<Team> teams = new ArrayList<>();

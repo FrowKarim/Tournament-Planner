@@ -24,11 +24,12 @@ public class Team {
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(name = "captain_id", unique = true)
+    @JoinColumn(name = "captain_id")
     private Player captain;
 
 
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "team_players",
