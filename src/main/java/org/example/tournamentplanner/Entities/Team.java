@@ -18,7 +18,7 @@ public class Team {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tournament_id", nullable = false)
+    @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
     @ManyToOne

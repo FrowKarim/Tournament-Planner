@@ -1,11 +1,8 @@
 package org.example.tournamentplanner.Controller;
 
-import org.example.tournamentplanner.DTO.Tournament.CreateTournamentRequestDTO;
 import org.example.tournamentplanner.Entities.Tournament;
 import org.example.tournamentplanner.Service.TournamentService;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/Tournaments")
@@ -19,16 +16,14 @@ public class TournamentController
     }
 
     @GetMapping("/{id}")
-    public Tournament getTournamentbyID(@RequestParam UUID ID)
+    public Tournament getTournamentbyID(@PathVariable Long id)
     {
-      return getTournamentbyID(ID) ;
+        return tournamentService.getTournament(id);
     }
 
     @PostMapping
-    public Tournament create(@RequestBody CreateTournamentRequestDTO request) {
-        return tournamentService.createTournament(request);
+    public Tournament create(@RequestParam Long playerId, @RequestBody Tournament tournament) {
+        return tournamentService.createTournament(playerId, tournament);
     }
-
-
 
 }

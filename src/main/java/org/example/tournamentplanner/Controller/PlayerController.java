@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/player")
+@RequestMapping("/api/player")
 
 public class PlayerController {
 
@@ -39,9 +39,9 @@ public class PlayerController {
         return playerService.save(player);
     }
 
-    @PutMapping
-    public Player updatePlayer(@RequestBody Player player) {
-
+    @PutMapping("/{id}")
+    public Player updatePlayer(@PathVariable Long id, @RequestBody Player player) {
+        player.setId(id);
         return playerService.save(player);
     }
 
@@ -49,8 +49,6 @@ public class PlayerController {
     public void deletePlayer(@PathVariable Long id) {
         playerService.deletePlayer(id);
     }
-
-
 
 }
 

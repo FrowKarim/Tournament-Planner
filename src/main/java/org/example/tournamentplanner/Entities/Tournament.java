@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
+
 
 @Entity
 @Table(name = "tournaments")
@@ -25,13 +25,22 @@ public class Tournament {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizer_id", nullable = true) //NULLABLE SUPPOSED TO BE FALSE, THIS IS FOR TESTING
-    private Organizer organizer;
+    private Player organizer;
+
+    @Column(nullable = false)
+    private int maxTeamSize;
+
+    private Integer maxTeams; // null = unlimited
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TournamentStatus status = TournamentStatus.CREATED;
 
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Match> matches = new HashSet<>();
+    private List<Match> matches = new ArrayList<>();
 
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Team> teams = new HashSet<>();
+    private List<Team> teams = new ArrayList<>();
 
     public Tournament(String name) {
         this.name = name;

@@ -24,5 +24,5 @@ public class Player {
 
     // bi‑directional many‑to‑many with Team
     @ManyToMany(mappedBy = "players")
-    private Set<Team> teams = new HashSet<>();
+    private List<Team> teams = new ArrayList<>();
 }
