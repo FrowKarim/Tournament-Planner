@@ -82,7 +82,8 @@ sonar {
         property "sonar.projectKey", "FrowKarim_Tournament-Planner"
         property "sonar.organization", "frowkarim"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
-        property "sonar.coverage.exclusions", ".github/**,**/Repository/**,**/Entity/**,**/DTO/**"
+        property "sonar.exclusions", "**/.github/**"
+        property "sonar.coverage.exclusions", "**/Repository/**,**/Entity/**,**/DTO/**"
 
     }
 }
