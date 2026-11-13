@@ -132,7 +132,7 @@ jobs:
     name: Deploy to Educloud
     needs: [test, sonar]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: self-hosted, Educloud, X64, Linux
+    runs-on: self-hosted, Linux, X64, Educloud
     steps:
       - name: Checkout
         uses: actions/checkout@v4
