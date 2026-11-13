@@ -1,14 +1,68 @@
 name: CD
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
-  print-message:
-    runs-on: ubuntu-latest
+  deploy:
+    name: Deploy to Educloud
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: [self-hosted, Educloud]
+
+    permissions:
+      contents: read
+      actions: read
+
+    concurrency:
+      group: tournament-staging-deployment
+      cancel-in-progress: false
 
     steps:
-      - name: Print CD Message
-        run: echo "CD pipeline triggered on merge to master branch."
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: build/libs
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build -t tournament-planner:latest .
+
+      - name: Start network and database (first run only)
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          docker network inspect tp-net >/dev/null 2>&1 || docker network create tp-net
+          docker inspect tp-db >/dev/null 2>&1 || docker run -d --name tp-db \
+            --network tp-net --restart unless-stopped \
+            -e POSTGRES_DB=tournament -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD="$DB_PASSWORD" \
+            -v tp-db-data:/var/lib/postgresql/data \
+            postgres:16
+
+      - name: Replace running container
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          docker rm -f tournament-planner || true
+          docker run -d --name tournament-planner \
+            --network tp-net --restart unless-stopped \
+            -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://tp-db:5432/tournament \
+            -e SPRING_DATASOURCE_USERNAME=postgres \
+            -e SPRING_DATASOURCE_PASSWORD="$DB_PASSWORD" \
+            -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
+            tournament-planner:latest
