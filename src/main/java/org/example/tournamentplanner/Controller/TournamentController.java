@@ -26,4 +26,9 @@ public class TournamentController
         return tournamentService.createTournament(playerId, tournament);
     }
 
+    @PutMapping
+    public Tournament update(@RequestParam Long playerId, @RequestBody Tournament tournament) {
+        return tournamentService.updateTournament(playerId, tournament);
+    }
+
 }

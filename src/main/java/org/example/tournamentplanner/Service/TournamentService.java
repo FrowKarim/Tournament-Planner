@@ -74,4 +74,8 @@ public class TournamentService {
         return teamRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Team not found"));
     }
+
+    public Tournament updateTournament(Long playerId, Tournament tournament) {
+        return tournamentRepository.save(tournament);
+    }
 }
