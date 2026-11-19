@@ -28,13 +28,10 @@ class TournamentServiceTest {
 
     @Mock
     private ITournamentRepository tournamentRepository;
-
     @Mock
     private IPlayerRepository playerRepository;
-
     @Mock
     private ITeamRepository teamRepository;
-
     @Mock
     private Team team;
 

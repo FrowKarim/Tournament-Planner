@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +27,9 @@ public class TeamService {
     public Team createTeam(Long captainId, Team team) {
         Player captain = getPlayer(captainId);
         team.setCaptain(captain);
+        if (team.getPlayers() == null) {
+            team.setPlayers(new ArrayList<>());
+        }
         team.getPlayers().add(captain);
         return teamRepository.save(team);
     }

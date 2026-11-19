@@ -13,7 +13,8 @@ public class TeamController
 
     private final TeamService teamService;
 
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService)
+    {
         this.teamService = teamService;
     }
 
