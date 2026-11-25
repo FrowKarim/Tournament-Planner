@@ -32,6 +32,8 @@ public class Tournament {
 
     private Integer maxTeams; // null = unlimited
 
+    private String game;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -1,13 +1,11 @@
 package org.example.tournamentplanner.Controller;
 
 import org.example.tournamentplanner.Entities.Player;
-import org.example.tournamentplanner.Repository.IPlayerRepository;
 import org.example.tournamentplanner.Service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/player")

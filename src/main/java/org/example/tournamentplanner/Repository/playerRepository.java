@@ -3,7 +3,8 @@ package org.example.tournamentplanner.Repository;
 import org.example.tournamentplanner.Entities.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+public interface playerRepository extends JpaRepository<Player, Long> {
 
-public interface IPlayerRepository extends JpaRepository<Player, Long> {
+    boolean existsByEmail(String email);
+
 }

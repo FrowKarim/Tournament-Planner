@@ -1,8 +1,7 @@
 package org.example.tournamentplanner.Service;
 
-import org.example.tournamentplanner.DTO.MatchDTO;
 import org.example.tournamentplanner.Entities.Match;
-import org.example.tournamentplanner.Repository.IMatchRepository;
+import org.example.tournamentplanner.Repository.matchRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,9 +9,9 @@ import java.time.LocalDateTime;
 @Service
 public class MatchService {
 
-    private IMatchRepository matchRepository;
+    private matchRepository matchRepository;
 
-    public MatchService(IMatchRepository repository) {
+    public MatchService(matchRepository repository) {
 
          this.matchRepository = repository ;
 
