@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,13 +21,6 @@ public class TeamService {
     private final teamRepository teamRepository;
     private final playerRepository playerRepository;
 
-<<<<<<< Updated upstream
-    @Transactional
-    public Team createTeam(Long captainId, Team team) {
-        Player captain = getPlayer(captainId);
-        team.setCaptain(captain);
-        team.getPlayers().add(captain);
-=======
     public Team createTeam(Long captainId, Team request) {
         if (request.getName() == null || request.getName().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team name is required");
@@ -37,7 +31,6 @@ public class TeamService {
         team.setName(request.getName());
         team.setCaptain(captain);
         team.setPlayers(new ArrayList<>(List.of(captain)));
->>>>>>> Stashed changes
         return teamRepository.save(team);
     }
 

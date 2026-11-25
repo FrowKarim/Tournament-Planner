@@ -92,8 +92,6 @@ public class TournamentService {
         return teamRepository.findById(id)
                 .orElseThrow(() -> fail(HttpStatus.NOT_FOUND, "Team not found"));
     }
-<<<<<<< Updated upstream
-=======
 
     private void requireOrganizer(Tournament tournament, Long requesterId) {
         if (tournament.getOrganizer() == null || !tournament.getOrganizer().getId().equals(requesterId)) {
@@ -131,5 +129,5 @@ public class TournamentService {
     private ResponseStatusException fail(HttpStatus status, String message) {
         return new ResponseStatusException(status, message);
     }
->>>>>>> Stashed changes
+
 }

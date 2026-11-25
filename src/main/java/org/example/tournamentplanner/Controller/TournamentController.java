@@ -27,8 +27,7 @@ public class TournamentController
         return tournamentService.createTournament(playerId, tournament);
     }
 
-<<<<<<< Updated upstream
-=======
+
     @PutMapping("/{id}")
     public Tournament update(@PathVariable Long id, @RequestParam Long requesterId,
                              @RequestBody Tournament tournament) {
@@ -47,5 +46,4 @@ public class TournamentController
         tournamentService.removeTeam(id, teamId, requesterId);
     }
 
->>>>>>> Stashed changes
 }

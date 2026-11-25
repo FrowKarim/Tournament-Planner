@@ -44,10 +44,6 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
-<<<<<<< Updated upstream
-    public void deletePlayer(Long id) {  playerRepository.deleteById(id); }
-}
-=======
     public void deletePlayer(Long id) {
         if (!playerRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found: " + id);
@@ -61,4 +57,3 @@ public class PlayerService {
         }
     }
 }
->>>>>>> Stashed changes
