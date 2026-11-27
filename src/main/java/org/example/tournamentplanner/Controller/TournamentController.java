@@ -29,20 +29,17 @@ public class TournamentController
 
 
     @PutMapping("/{id}")
-    public Tournament update(@PathVariable Long id, @RequestParam Long requesterId,
-                             @RequestBody Tournament tournament) {
+    public Tournament update(@PathVariable Long id, @RequestParam Long requesterId, @RequestBody Tournament tournament) {
         return tournamentService.updateTournament(id, requesterId, tournament);
     }
 
     @PostMapping("/{id}/teams/{teamId}")
-    public Team addTeam(@PathVariable Long id, @PathVariable Long teamId,
-                        @RequestParam Long requesterId) {
+    public Team addTeam(@PathVariable Long id, @PathVariable Long teamId, @RequestParam Long requesterId) {
         return tournamentService.addTeam(id, teamId, requesterId);
     }
 
     @DeleteMapping("/{id}/teams/{teamId}")
-    public void removeTeam(@PathVariable Long id, @PathVariable Long teamId,
-                           @RequestParam Long requesterId) {
+    public void removeTeam(@PathVariable Long id, @PathVariable Long teamId, @RequestParam Long requesterId) {
         tournamentService.removeTeam(id, teamId, requesterId);
     }
 

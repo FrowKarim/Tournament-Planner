@@ -1,5 +1,7 @@
 package org.example.tournamentplanner.Controller;
 import org.example.tournamentplanner.Entities.Match;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -12,7 +14,11 @@ public class MatchController {
 
         return  getMatch(matchID);
     }
-
+    @MessageMapping("/send")
+    @SendTo("/topic/messages")
+    public String processMessage(String message) {
+        return "Received: " + message;
+    }
 
 }
 

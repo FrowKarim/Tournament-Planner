@@ -12,12 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -61,36 +63,72 @@ class TournamentServiceTest {
     @Test
     void createTournament_setsOrganizerAndSaves() {
         Player organizer = createPlayer(1L);
-        Tournament tournament = Tournament.builder().name("Summer Cup").maxTeamSize(5).build();
+        Tournament request = Tournament.builder().name("Summer Cup").maxTeamSize(5).build();
         when(playerRepository.findById(1L)).thenReturn(Optional.of(organizer));
         when(tournamentRepository.existsByName("Summer Cup")).thenReturn(false);
-        when(tournamentRepository.save(tournament)).thenReturn(tournament);
+        when(tournamentRepository.save(any(Tournament.class))).thenAnswer(i -> i.getArgument(0));
 
-        Tournament result = tournamentService.createTournament(1L, tournament);
+        Tournament result = tournamentService.createTournament(1L, request);
 
         assertEquals(organizer, result.getOrganizer());
-        verify(tournamentRepository).save(tournament);
+        assertEquals("Summer Cup", result.getName());
+        verify(tournamentRepository).save(any(Tournament.class));
     }
 
     @Test
     void createTournament_whenPlayerNotFound_throwsException() {
-        Tournament tournament = Tournament.builder().name("Summer Cup").build();
+        Tournament request = Tournament.builder().name("Summer Cup").build();
         when(playerRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
-                () -> tournamentService.createTournament(99L, tournament));
-        verify(tournamentRepository, never()).save(tournament);
+        assertThrows(ResponseStatusException.class,
+                () -> tournamentService.createTournament(99L, request));
+        verify(tournamentRepository, never()).save(any(Tournament.class));
     }
 
     @Test
     void createTournament_whenNameExists_throwsException() {
-        Tournament tournament = Tournament.builder().name("Summer Cup").build();
+        Tournament request = Tournament.builder().name("Summer Cup").maxTeamSize(5).build();
         when(playerRepository.findById(1L)).thenReturn(Optional.of(createPlayer(1L)));
         when(tournamentRepository.existsByName("Summer Cup")).thenReturn(true);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> tournamentService.createTournament(1L, tournament));
-        verify(tournamentRepository, never()).save(tournament);
+        assertThrows(ResponseStatusException.class,
+                () -> tournamentService.createTournament(1L, request));
+        verify(tournamentRepository, never()).save(any(Tournament.class));
+    }
+
+    // updateTournament
+
+    @Test
+    void updateTournament_whenRequesterIsOrganizer_updatesFields() {
+        Tournament tournament = createTournament();
+        Tournament request = Tournament.builder().name("Winter Cup").game("Chess").maxTeamSize(4).build();
+        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(tournament));
+
+        Tournament result = tournamentService.updateTournament(1L, 1L, request);
+
+        assertEquals("Winter Cup", result.getName());
+        assertEquals("Chess", result.getGame());
+        assertEquals(4, result.getMaxTeamSize());
+    }
+
+    @Test
+    void updateTournament_whenRequesterIsNotOrganizer_throwsException() {
+        Tournament request = Tournament.builder().name("Winter Cup").maxTeamSize(4).build();
+        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(createTournament()));
+
+        assertThrows(ResponseStatusException.class,
+                () -> tournamentService.updateTournament(1L, 99L, request));
+    }
+
+    @Test
+    void updateTournament_whenTournamentAlreadyStarted_throwsException() {
+        Tournament tournament = createTournament();
+        tournament.setStatus(TournamentStatus.STARTED);
+        Tournament request = Tournament.builder().name("Winter Cup").maxTeamSize(4).build();
+        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(tournament));
+
+        assertThrows(ResponseStatusException.class,
+                () -> tournamentService.updateTournament(1L, 1L, request));
     }
 
     // addTeam
@@ -115,19 +153,30 @@ class TournamentServiceTest {
         when(teamRepository.findById(2L)).thenReturn(Optional.of(team));
         when(team.getCaptain()).thenReturn(createPlayer(5L));
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.addTeam(1L, 2L, 6L));
     }
 
     @Test
     void addTeam_whenTournamentAlreadyStarted_throwsException() {
         Tournament tournament = createTournament();
-        tournament.setStatus(TournamentStatus.values()[TournamentStatus.values().length - 1]);
+        tournament.setStatus(TournamentStatus.STARTED);
         when(tournamentRepository.findById(1L)).thenReturn(Optional.of(tournament));
         when(teamRepository.findById(2L)).thenReturn(Optional.of(team));
         when(team.getCaptain()).thenReturn(createPlayer(5L));
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(ResponseStatusException.class,
+                () -> tournamentService.addTeam(1L, 2L, 5L));
+    }
+
+    @Test
+    void addTeam_whenTeamAlreadyInTournament_throwsException() {
+        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(createTournament()));
+        when(teamRepository.findById(2L)).thenReturn(Optional.of(team));
+        when(team.getCaptain()).thenReturn(createPlayer(5L));
+        when(team.getTournament()).thenReturn(createTournament());
+
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.addTeam(1L, 2L, 5L));
     }
 
@@ -140,7 +189,7 @@ class TournamentServiceTest {
         when(teamRepository.findById(2L)).thenReturn(Optional.of(team));
         when(team.getCaptain()).thenReturn(createPlayer(5L));
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.addTeam(1L, 2L, 5L));
     }
 
@@ -153,7 +202,7 @@ class TournamentServiceTest {
         when(team.getCaptain()).thenReturn(createPlayer(5L));
         when(team.getPlayers()).thenReturn(List.of(createPlayer(5L), createPlayer(6L)));
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.addTeam(1L, 2L, 5L));
     }
 
@@ -162,7 +211,7 @@ class TournamentServiceTest {
         when(tournamentRepository.findById(1L)).thenReturn(Optional.of(createTournament()));
         when(teamRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.addTeam(1L, 99L, 5L));
     }
 
@@ -170,8 +219,10 @@ class TournamentServiceTest {
 
     @Test
     void removeTeam_whenRequesterIsOrganizer_removesTeamFromTournament() {
-        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(createTournament()));
+        Tournament tournament = createTournament();
+        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(tournament));
         when(teamRepository.findById(2L)).thenReturn(Optional.of(team));
+        when(team.getTournament()).thenReturn(tournament);
 
         tournamentService.removeTeam(1L, 2L, 1L);
 
@@ -182,8 +233,18 @@ class TournamentServiceTest {
     void removeTeam_whenRequesterIsNotOrganizer_throwsException() {
         when(tournamentRepository.findById(1L)).thenReturn(Optional.of(createTournament()));
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.removeTeam(1L, 2L, 99L));
+        verify(team, never()).setTournament(null);
+    }
+
+    @Test
+    void removeTeam_whenTeamIsNotInTournament_throwsException() {
+        when(tournamentRepository.findById(1L)).thenReturn(Optional.of(createTournament()));
+        when(teamRepository.findById(2L)).thenReturn(Optional.of(team));
+
+        assertThrows(ResponseStatusException.class,
+                () -> tournamentService.removeTeam(1L, 2L, 1L));
         verify(team, never()).setTournament(null);
     }
 
@@ -203,20 +264,7 @@ class TournamentServiceTest {
     void getTournament_whenNotFound_throwsException() {
         when(tournamentRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> tournamentService.getTournament(99L));
-    }
-
-    // updateTournament
-
-    @Test
-    void updateTournament_savesAndReturnsTournament() {
-        Tournament tournament = createTournament();
-        when(tournamentRepository.save(tournament)).thenReturn(tournament);
-
-        Tournament result = tournamentService.updateTournament(1L, tournament);
-
-        assertEquals(tournament, result);
-        verify(tournamentRepository).save(tournament);
     }
 }
